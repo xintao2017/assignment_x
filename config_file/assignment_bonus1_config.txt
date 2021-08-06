@@ -1,0 +1,7 @@
+Estate:House:Basement:Kitchen - knife
+Estate:House:Basement:Stairs:Bedroom - pillow
+Estate:House:Hallway - keys
+Estate:Garden:Toolshed - knife
+Estate:Garden - chairs
+Estate:House:Basement:Livingroom:Toilet - toiletpaper
+Estate:House:Hallway:Livingroom - remote
