@@ -5,20 +5,20 @@ package alternative1;
  *
  *
  * @author Tao Xin <taoxin.se@gmail.com>
- * @date 2021-07-28
+ * @date 2021-08-06
  */
-
-import common.ConfigLoader;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Queue;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Comparator;
 
 
 public class GetPath {
 
-    private final static String CONFIG_FILE_PATH = "./config_file/assignment_bonus1_config.txt";
+    private final static String CONFIG_FILE_PATH = "./config_file/assignment_config.txt";
 
     public static void main(String[] args) {
         if (args.length < 2 || args.length > 2) {
@@ -34,12 +34,12 @@ public class GetPath {
 
         ConfigLoader config = new ConfigLoader();
 
-        HashMap<String, Location> locationsMap = config.loadConfigFromFile(configFilePath);
-        HashMap<String, ArrayList<Location>> objectsMap = config.getObjectMap();
+        HashMap<String, Tree> treeMap = config.loadConfigFromFile(configFilePath);
+        HashMap<String, ArrayList<Tree>> objectsMap = config.getObjectMap();
 
-        if (!locationsMap.containsKey(lo)) {
-            System.out.println("The input Location is not available! ");
-            System.out.println("Available locations are: " + locationsMap.keySet() + "\nPlease try again!");
+        if (!treeMap.containsKey(lo)) {
+            System.out.println("The input is not available! ");
+            System.out.println("Available Tree are: " + objectsMap.keySet() + "\nPlease try again!");
             return;
         }
 
@@ -48,43 +48,67 @@ public class GetPath {
             return;
         }
 
-        Location startLocation = locationsMap.get(lo);
-        ArrayList<Location> locationsWithObject = objectsMap.get(obj);
+        Tree startT = treeMap.get(lo);
+        ArrayList<Tree> treeWithObject = objectsMap.get(obj);
 
-        if (locationsWithObject.contains(startLocation)) {
-            System.out.println("You are in the " + startLocation.getName() + ". You can get " + obj + " right here.");
+        if (treeWithObject.contains(startT)) {
+            System.out.println("You are in the " + startT.getName() + ". You can get " + obj + " right here.");
             return;
         }
 
-        Location dest = getNode(startLocation, locationsWithObject);
-        ArrayList<Location> pathToDest = getPath(startLocation, dest);
+        ArrayList<Tree> tNodes = objectsMap.get(obj);
+        ArrayList<Tree> path = new ArrayList<Tree>();
+        ArrayList<ArrayList<Tree>> pathsToDest = new ArrayList<ArrayList<Tree>>();
+        int i;
+        for (Tree t : tNodes) {
 
-        if (pathToDest == null) {
-            System.out.println("Sorry, we cant find the path between the two location.");
-            return;
+            pathsToDest.add(getPath(startT, t));
         }
 
-        System.out.println("You are in the " + startLocation.getName());
-        for (Location p : pathToDest) {
-            System.out.print("Go to " + p.getName() + " ");
+        if (pathsToDest.size() == 0) {
+            System.out.println("Sorry, we cant find the path between the two tree nodes.");
+            return;
+        }
+        else if (pathsToDest.size() == 1) {
+            path = pathsToDest.get(0);
+        }
+        else {
+            path = pathsToDest.stream()
+                    .min(Comparator.comparingInt(List::size))
+                    .orElse(new ArrayList<>());
+        }
+
+        System.out.println("You are in the " + startT.getName());
+        for (Tree t : path) {
+            System.out.print("Go to " + t.getName() + " ");
         }
         System.out.print("get " + obj + ".\n");
     }
 
-    private static ArrayList<Location> getPath(Location from, Location dest) {
-        Location temp = from;
-        ArrayList<Location> dest_pathToRoot = dest.getPathToRoot();
-        ArrayList<Location> path = new ArrayList<Location>();
+    private static ArrayList<Tree> getPath(Tree from, Tree dest) {
+        Tree temp;
+        Queue<Tree> qTree = new LinkedList<Tree>();
+        ArrayList<Tree> path = new ArrayList<Tree>();
+        qTree.add(from);
 
-        while (temp.hasParent()) {
-            temp = temp.getParent();
-            path.add(temp);
+        while (!qTree.isEmpty()) {
+            temp = qTree.poll();
+            if(!path.contains(temp)) {
+                path.add(temp);
+            }
 
-            if (dest_pathToRoot.contains(temp)) {// Find the common ancestor
-                if (dest_pathToRoot.removeAll(temp.getPathToRoot())) {
-                    path.addAll(dest_pathToRoot);
-                }
+            if (temp.getAllConnected().contains(dest)) {// connection point
+                path.add(dest);
+                System.out.println("path: - " + path);
                 return path;
+            }
+            else if (temp.getAllConnected().size() == 1) {
+                path.remove(temp);
+            }
+            for (Tree t : temp.getAllConnected()) {
+                if (!qTree.contains(t)) {
+                    qTree.add(t);
+                }
             }
         }
         return null;

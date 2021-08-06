@@ -27,41 +27,107 @@ public class ConfigLoader {
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private HashMap<String, ArrayList<Tree>> objMap = new HashMap<String, ArrayList<Tree>>();
 
-    private Tree createTreeStruct(String nodes, Tree root) {
+    public HashMap<String, Tree> loadConfigFromFile(String path) {
+        BufferedReader bufferedReader = null;
+        HashMap<String, Tree> treeMap = new HashMap<String, Tree>();
+
+        try {
+            bufferedReader = new BufferedReader(new FileReader(path));
+            String line = bufferedReader.readLine();
+
+            while (line != null) {
+                treeMap = createTreeStruct(line.trim(), treeMap);
+                line = bufferedReader.readLine();
+            }
+        }
+        catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Config file wouldn't load!");
+        }
+        catch (InvalidInputException e) {
+            LOGGER.log(Level.WARNING, "Invalid input on Config file.");
+        }
+        finally {
+            try {
+                bufferedReader.close();
+            }
+            catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Failed to close BufferedReader Stream.", e);
+            }
+        }
+
+        return treeMap;
+    }
+
+
+    private HashMap<String, Tree> createTreeStruct(String nodes, HashMap<String, Tree> treeMap)
+                                                                    throws InvalidInputException{
         String[] nodes_arr = nodes.split(":");
-        Tree temp = root;
+        Tree temp = null;
 
         if (nodes_arr.length <= 1)
             throw new InvalidInputException("Invalid input"); // Input is not valid.
 
-        for(int i = 0; i < nodes_arr.length; i++) {
-            if (nodes_arr[i].contains("-")) { //End of the string, extract object
-                String[] obj_arr = nodes_arr[i].split("-");
-                Tree x = new Tree(obj_arr[0].trim());
-                x.setObject(obj_arr[1]);
+        for(int i = 0; i < nodes_arr.length ; i++) {
+            String tree_key = nodes_arr[i].toLowerCase();
+            String object = "";
+            Tree tree_x = null;
+            Tree parent = null;
 
-            }
-            Tree node = new Tree(nodes_arr[i]);
-            if (i == 0) { //The root node
-                Tree root = new Tree(nodes_arr[i]);
-                temp = root;
+            if (i == 0 && !treeMap.containsKey(tree_key)) {// Create root
+                tree_x = new Tree(nodes_arr[i]);
             }
             else {
-                Tree node = new Tree(nodes_arr[i]);
-                temp.addChild(node);
-                node.setParent(temp);
-                temp = node;
+                if (tree_key.contains("-")) { // Update the object if the location already exists
+                    String[] t_obj = nodes_arr[i].split("-");
+                    object = t_obj[1].trim();
+                    tree_key = t_obj[0].trim().toLowerCase();
+                    if (treeMap.containsKey(tree_key)) { // If the location has existed
+                        treeMap.get(tree_key).setObject(object);
+
+                        addObjectToMap(object, treeMap.get(tree_key));
+                        continue;
+                    } else {
+                        parent = treeMap.get(nodes_arr[i - 1].toLowerCase());
+                        tree_x = new Tree(t_obj[0].trim());
+                        tree_x.setObject(object);
+                        addObjectToMap(object, tree_x);
+                    }
+                } else { // Create new Location
+                    if (treeMap.containsKey(tree_key)) {
+                        continue;
+                    }
+                    parent = treeMap.get(nodes_arr[i - 1].toLowerCase());
+                    tree_x = new Tree(nodes_arr[i]);
+                }
+                tree_x.setParent(parent);
+                parent.addChild(tree_x);
             }
+            treeMap.put(tree_key, tree_x);
         }
-        return root;
+        return treeMap;
     }
 
 
+    /**
+     * Add the Object to HashMap, which saves objects and their locations*
+     *
+     * @param object
+     * @param location
+     */
+    private void addObjectToMap(String object, Tree tree) {
+        ArrayList<Tree> listOfTrees = new ArrayList<Tree>();
+        if (this.objMap.containsKey(object)) {
+            listOfTrees = objMap.get(object);
+        }
+        listOfTrees.add(tree);
+        this.objMap.put(object, listOfTrees);
+    }
+
 
     /**
-     * Get the object and their locations, there can be multi-locations for one object
+     * Get the object and their locations
      *
-     * @return HashMap<String, ArrayList<Location>>
+     * @return HashMap<String, ArrayList<Tree>>
      */
     public HashMap<String, ArrayList<Tree>> getObjectMap(){
         return objMap;

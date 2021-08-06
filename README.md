@@ -8,8 +8,8 @@ For BFS it requires to iterate the Tree structure to find the Path. If I save ev
 to find the Shortest/Correct path by calculating of the paths. The Two solutions are either use computing resources
 or consuming Memory resources.
 
-In the implementation, I did save the Path To Root while reading the Config File, as the Questions states, it would be
-a normal size House.
+In the "assignment" implementation, I did save the Path To Root while reading the Config File, as the Questions states, it would be
+a normal size House. Under "alternative1", it is implemented with BFS.
 
 
 ### Bonus #1

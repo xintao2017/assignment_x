@@ -44,15 +44,11 @@ public class ConfigLoader {
 
             while (line != null) {
                 loadedLocations = getLocations(line.trim(), loadedLocations);
-                loadedNodes = loadNodes(line.trim(), loadedNodes);
                 line = bufferedReader.readLine();
             }
         }
         catch (IOException e) {
             LOGGER.log(Level.WARNING, "Config file wouldn't load!");
-        }
-        catch (InvalidInputException e) {
-            LOGGER.log(Level.WARNING, "Invalid input on Config file.");
         }
         finally {
             try {
@@ -118,7 +114,7 @@ public class ConfigLoader {
         String[] node_arr = locationConfig.split(":");
         Node node = null;
 
-        if (node_arr.length <= 1) {
+        if (node_arr.length < 2) {
             throw new InvalidInputException("Invalid Input from the Config file");
         }
 

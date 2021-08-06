@@ -58,32 +58,15 @@ public class Tree {
         return object;
     }
 
+    public String toString() { return name; }
 
-    public Tree searchObj(String obj, Tree root) {
-        Queue<Tree> queue = new LinkedList<Tree>();
-        List<Tree> visited = new ArrayList<Tree>();
-        queue.add(root);
-        while(!queue.isEmpty()) {
-            Tree ref = queue.poll();
-            if (ref.getObject().equals(name))
-                return ref;
-
-            queue.add(ref.getChildren());
+    public List<Tree> getAllConnected() {
+        List<Tree> connected = new ArrayList<Tree>();
+        connected.addAll(children);
+        if (parent != null) {
+            connected.add(parent);
         }
-        return null;
-    }
 
-    public Tree search(String name, Tree root) {
-        Queue<Tree> queue = new LinkedList<Tree>();
-        List<Tree> visited = new ArrayList<Tree>();
-        queue.add(root);
-        while(!queue.isEmpty()) {
-            Tree ref = queue.poll();
-            if (ref.getName().equals(name))
-                return ref;
-
-            queue.add(ref.getChildren());
-        }
-        return null;
+        return connected;
     }
 }
