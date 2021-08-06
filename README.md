@@ -24,6 +24,8 @@ But being lazy, as it is stated only Stairs that was "more strenuous".
 
 It should be possible to only check on "Stairs" if it is in the resulting PATH.
 
+* * Due to lack of time, did not have much time to do re-factory of the code :( * *
+
 
 
 ## How to Run
@@ -37,6 +39,15 @@ javac assignment/GetPath.java
 Then run the programme as:
 ```
 java assignment/GetPath bedroom keys
+```
+
+For bonus question #1:
+```
+javac assignment/bonus1/GetPathToObj.java
+```
+Then run the programme as:
+```
+java assignment/bonus1/GetPathToObj bedroom keys
 ```
 
 The Config files are located in **assignment_x/config_file/**, feel free to add more rooms/locations as you need.

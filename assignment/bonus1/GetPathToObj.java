@@ -126,21 +126,24 @@ public class GetPathToObj {
                     path.remove(s);
                     return path;
                 }
-                else if (notVisitedNeighbors.size() > 0) {
+
+                if (notVisitedNeighbors.size() > 0) {
                     for (Node n : notVisitedNeighbors) {
                         if (!nodeStack.contains(n)) {
                             nodeStack.push(n);
                         }
                     }
                 }
-                else {
-                    while(!path.isEmpty() && !nodeStack.isEmpty()) {
-                        if (path.getLast().areNeighbors(nodeStack.peek())) {
-                            path.removeLast();
-                        }
-                        else
-                            break;
+
+                while(!path.isEmpty() && !nodeStack.isEmpty()) {
+                    if (s.getNeighbors().contains(nodeStack.peek())) {
+                        path = new LinkedList<Node>();
                     }
+                    else if (!path.getLast().getNeighbors().contains(nodeStack.peek())) {
+                        path.removeLast();
+                    }
+                    else
+                        break;
                 }
             }
         }

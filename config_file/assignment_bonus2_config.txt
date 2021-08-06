@@ -5,4 +5,4 @@ Estate:Garden:Toolshed - knife
 Estate:Garden - chairs
 Estate:House:Basement:Livingroom:Toilet - toiletpaper
 Estate:House:Hallway:Livingroom - remote
-Estate:House:Hallway:Livingroom:StudyRoom:BedroomBedroom - pillow
+Estate:House:Hallway:Livingroom:StudyRoom:Bedroom - pillow

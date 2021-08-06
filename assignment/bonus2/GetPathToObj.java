@@ -76,7 +76,6 @@ public class GetPathToObj {
         for (Node d : nodes) { // Get all the paths to the Node(with Object)
             paths.add(getShortestPathBetweenNodes(nodeStart, d));
         }
-        System.out.println(paths);
 
         // Get the Shortest Path to the object
         if (paths.size() == 0) {
@@ -87,11 +86,26 @@ public class GetPathToObj {
             path = paths.get(0);
         }
         else {
-            path = paths.stream()
-                    .min(Comparator.comparingInt(List::size))
-                    .orElse(new LinkedList<>());
-        }
+            int difficulty = 0;
+            for (LinkedList<Node> p : paths) {
+               int x = p.size() + 1;
+               if (p.contains(nodeMap.get("stairs"))) {
+                   int index = p.indexOf(nodeMap.get("stairs"));
+                   if (p.get(index + 1).getName().equals(nodeMap.get("bedroom"))) {
+                       difficulty = p.size() + 2; // Assuming that going up stairs is 2 times harder
+                   }
+               }
+               else {
+                   difficulty = p.size();
+               }
 
+               if (difficulty <= x) {
+                   path = p;
+                   x = difficulty;
+               }
+
+            }
+        }
 
         System.out.println("You are in the " + nodeStart.getName());
         for (Node n : path) {
@@ -134,14 +148,16 @@ public class GetPathToObj {
                         }
                     }
                 }
-                else {
-                    while(!path.isEmpty() && !nodeStack.isEmpty()) {
-                        if (path.getLast().areNeighbors(nodeStack.peek())) {
-                            path.removeLast();
-                        }
-                        else
-                            break;
+
+                while(!path.isEmpty() && !nodeStack.isEmpty()) {
+                    if (s.getNeighbors().contains(nodeStack.peek())) {
+                        path = new LinkedList<Node>();
                     }
+                    else if (!path.getLast().getNeighbors().contains(nodeStack.peek())) {
+                        path.removeLast();
+                    }
+                    else
+                        break;
                 }
             }
         }

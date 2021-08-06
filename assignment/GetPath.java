@@ -56,6 +56,7 @@ public class GetPath {
             return;
         }
 
+
         if (!objectsMap.containsKey(obj)) {
             System.out.println("The input Object (" + obj + ") is not available! Please try again!");
             return;
