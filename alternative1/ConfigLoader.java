@@ -27,6 +27,13 @@ public class ConfigLoader {
     private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private HashMap<String, ArrayList<Tree>> objMap = new HashMap<String, ArrayList<Tree>>();
 
+
+    /**
+     * Read the Config file and load the content into Tree struct.
+     *
+     * @param path
+     * @return
+     */
     public HashMap<String, Tree> loadConfigFromFile(String path) {
         BufferedReader bufferedReader = null;
         HashMap<String, Tree> treeMap = new HashMap<String, Tree>();
@@ -59,6 +66,14 @@ public class ConfigLoader {
     }
 
 
+    /**
+     *  Read the contect of config file and load it into Tree structure.
+     *
+     * @param nodes
+     * @param treeMap
+     * @return
+     * @throws InvalidInputException
+     */
     private HashMap<String, Tree> createTreeStruct(String nodes, HashMap<String, Tree> treeMap)
                                                                     throws InvalidInputException{
         String[] nodes_arr = nodes.split(":");

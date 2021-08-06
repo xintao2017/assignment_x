@@ -30,6 +30,13 @@ public class GetPath {
     }
 
 
+    /**
+     * Get the Path to the user inputs, and print out the paths.
+     *
+     * @param lo
+     * @param obj
+     * @param configFilePath
+     */
     private static void getPathToObj(String lo, String obj, String configFilePath) {
 
         ConfigLoader config = new ConfigLoader();
@@ -85,6 +92,14 @@ public class GetPath {
         System.out.print("get " + obj + ".\n");
     }
 
+
+    /**
+     * Get the path between two nodes
+     *
+     * @param from
+     * @param dest
+     * @return
+     */
     private static ArrayList<Tree> getPath(Tree from, Tree dest) {
         Tree temp;
         Queue<Tree> qTree = new LinkedList<Tree>();
