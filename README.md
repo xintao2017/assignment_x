@@ -4,12 +4,13 @@ After reading through the assignment, I draw the structure of the "House" on pap
 to me (with 'Estate' as the root). And what I need to do is to find a shortest PATH of 2 Rooms/Locations in the Tree structure.
 
 As for solution, I was thinking about Breadth First Search (BFS) or I can save the path to the Root for each Location.
-For BFS it requires to iterate the Tree structure to find the Path. If I save every Location's path to Root, I can manage
-to find the Shortest/Correct path by calculating of the paths. The Two solutions are either use computing resources
-or consuming Memory resources.
+For BFS it requires to iterate the Tree structure, and return the first found PATH, which will be the one we wanted. 
+Or I can save every Location's path to the Root, then I can manage to find the Shortest/Correct path by calculating of the paths (Path to Root). 
+
+The two solutions are either use more computing resources or consuming more Memory resources.
 
 In the "assignment" implementation, I did save the Path To Root while reading the Config File, as the Questions states, it would be
-a normal size House. Under "alternative1", it is implemented with BFS.
+a normal size House. Under "alternative1" folder, it is implemented with BFS.
 
 
 ### Bonus #1
@@ -24,7 +25,7 @@ But being lazy, as it is stated only Stairs that was "more strenuous".
 
 It should be possible to only check on "Stairs" if it is in the resulting PATH.
 
-* * Due to lack of time, did not have much time to do re-factory of the code :( * *
+* * Due to lack of time, did not have much time to do re-factory /write tests . :( * *
 
 
 
@@ -41,7 +42,7 @@ Then run the programme as:
 java assignment/GetPath bedroom keys
 ```
 
-For bonus question #1:
+For bonus question #1 (#2):
 ```
 javac assignment/bonus1/GetPathToObj.java
 ```
